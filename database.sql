@@ -46,3 +46,15 @@ CREATE TABLE IF NOT EXISTS transaksi (
     FOREIGN KEY (id_buku) REFERENCES buku(id_buku) ON DELETE CASCADE,
     FOREIGN KEY (id_anggota) REFERENCES anggota(id_anggota) ON DELETE CASCADE
 );
+
+--Tabel denda
+CREATE TABLE denda (
+    id_denda INT AUTO_INCREMENT PRIMARY KEY,
+    id_transaksi INT,
+    id_anggota INT,
+    jumlah_denda INT,
+    status ENUM('belum dibayar', 'sudah dibayar') DEFAULT 'belum dibayar',
+    tanggal_denda DATE,
+    FOREIGN KEY (id_transaksi) REFERENCES transaksi(id_transaksi),
+    FOREIGN KEY (id_anggota) REFERENCES anggota(id_anggota)
+);
