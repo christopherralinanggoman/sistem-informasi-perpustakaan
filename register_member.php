@@ -7,18 +7,19 @@ $success = "";
 $error   = "";
 
 if(isset($_POST['register'])){
-    $nama     = mysqli_real_escape_string($conn, $_POST['nama']);
-    $email    = mysqli_real_escape_string($conn, $_POST['email']);
-    $password = mysqli_real_escape_string($conn, $_POST['password']);
-    // Menggunakan password_hash untuk keamanan
+    // Sanitize and trim user input
+    $nama     = mysqli_real_escape_string($conn, strip_tags(trim($_POST['nama'])));
+    $email    = mysqli_real_escape_string($conn, strip_tags(trim($_POST['email'])));
+    $password = mysqli_real_escape_string($conn, strip_tags(trim($_POST['password'])));
+    // Use password_hash for security
     $password_hashed = password_hash($password, PASSWORD_DEFAULT);
-    $alamat  = mysqli_real_escape_string($conn, $_POST['alamat']);
-    $no_telp = mysqli_real_escape_string($conn, $_POST['no_telp']);
-
+    $alamat   = mysqli_real_escape_string($conn, strip_tags(trim($_POST['alamat'])));
+    $no_telp  = mysqli_real_escape_string($conn, strip_tags(trim($_POST['no_telp'])));
+    
     $query = "INSERT INTO anggota (nama, email, password, alamat, no_telp) 
               VALUES ('$nama', '$email', '$password_hashed', '$alamat', '$no_telp')";
     if(mysqli_query($conn, $query)) {
-        // Tampilkan pesan sukses pada halaman yang sama
+        // Show success message on the same page
         $success = "Registrasi berhasil! Silakan <a href='login.php'>login di sini</a>.";
     } else {
         $error = "Error: " . mysqli_error($conn);
@@ -36,9 +37,9 @@ if(isset($_POST['register'])){
 <body>
     <div class="login-container">
         <h2>Registrasi Member</h2>
-        <!-- Tampilkan pesan sukses atau error -->
+        <!-- Display success or error messages safely -->
         <?php if(!empty($error)) { ?>
-            <p style='color:red;'><?php echo $error; ?></p>
+            <p style='color:red;'><?php echo htmlspecialchars($error); ?></p>
         <?php } elseif(!empty($success)) { ?>
             <p style='color:green;'><?php echo $success; ?></p>
         <?php } ?>
