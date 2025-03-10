@@ -175,7 +175,7 @@ if(isset($_GET['action']) && $_GET['action'] === 'return' && isset($_GET['id_tra
             <th>Judul Buku</th>
             <th>Pengarang</th>
             <th>Penerbit</th>
-            <th>Aksi</th>
+            <th>Pinjam/Kembalikan</th>
         </tr>
         <?php
         // List available books: those not currently borrowed

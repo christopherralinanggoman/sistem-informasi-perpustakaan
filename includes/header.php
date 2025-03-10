@@ -52,10 +52,11 @@ if (session_status() === PHP_SESSION_NONE) {
 <body>
 <div class="navbar">
     <ul>
-        <!-- Admin Menu Bar (example) -->
+        <!-- Admin Menu Bar -->
         <li><a href="../pages/daftarbuku.php">Daftar Buku</a></li>
         <li><a href="../pages/pengguna.php">Pengguna</a></li>
         <li><a href="../pages/peminjaman_buku_admin.php">Peminjaman Buku</a></li>
+        <li><a href="../pages/tambah_buku_admin.php">Tambah Buku</a></li> <!-- Tambahan Menu -->
         <li class="logout"><a href="../logout.php">Logout</a></li>
     </ul>
 </div>
