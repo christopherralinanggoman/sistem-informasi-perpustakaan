@@ -43,6 +43,7 @@ if(isset($_GET['action']) && $_GET['action'] === 'borrow' && isset($_GET['id_buk
 <head>
     <meta charset="UTF-8">
     <title>Peminjaman Buku</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
     <style>
         body {
             margin: 0;
@@ -77,7 +78,6 @@ if(isset($_GET['action']) && $_GET['action'] === 'borrow' && isset($_GET['id_buk
             display: table;
             clear: both;
         }
-
         table {
             width: 100%;
             border-collapse: collapse;
@@ -93,6 +93,18 @@ if(isset($_GET['action']) && $_GET['action'] === 'borrow' && isset($_GET['id_buk
         }
         h2 {
             margin-top: 20px;
+        }
+        /* Styling for the borrow button */
+        .borrow-btn {
+            background-color: #007bff;
+            color: #fff;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .borrow-btn:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -128,6 +140,8 @@ if(isset($_GET['action']) && $_GET['action'] === 'borrow' && isset($_GET['id_buk
         // Tampilkan semua buku
         $bookQuery = "SELECT * FROM buku";
         $bookResult = mysqli_query($conn, $bookQuery);
+        // Initialize counter
+        $no = 1;
         if(mysqli_num_rows($bookResult) > 0){
             while($row = mysqli_fetch_assoc($bookResult)){
                 $id_buku = $row['id_buku'];
@@ -137,7 +151,7 @@ if(isset($_GET['action']) && $_GET['action'] === 'borrow' && isset($_GET['id_buk
                 $borrowed = mysqli_num_rows($borrowResult) > 0;
 
                 echo "<tr>";
-                echo "<td>".$row['id_buku']."</td>";
+                echo "<td>".$no."</td>";  // Using our counter for sequential numbering
                 echo "<td><img src='../assets/images/books/".$row['gambar']."' alt='Gambar Buku' width='80'></td>";
                 echo "<td>".$row['judul']."</td>";
                 echo "<td>".$row['pengarang']."</td>";
@@ -147,10 +161,12 @@ if(isset($_GET['action']) && $_GET['action'] === 'borrow' && isset($_GET['id_buk
                 if($borrowed){
                     echo "Tidak Tersedia";
                 } else {
-                    echo "<a href='peminjaman_buku.php?action=borrow&id_buku=$id_buku'>Pinjam</a>";
+                    // Use a button instead of a link for borrowing a book
+                    echo "<button class='borrow-btn' onclick=\"location.href='peminjaman_buku.php?action=borrow&id_buku=".$id_buku."'\">Pinjam Buku</button>";
                 }
                 echo "</td>";
                 echo "</tr>";
+                $no++;
             }
         } else {
             echo "<tr><td colspan='7'>Tidak ada buku yang tersedia.</td></tr>";
