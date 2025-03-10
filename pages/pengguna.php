@@ -10,7 +10,10 @@ include_once("../includes/config.php");
 ?>
 
 <!-- Tabel Admin -->
-<h3><br>Daftar Admin</h3>
+
+<div style="text-align: center; margin: 20px;">
+    <h3><br>Daftar Admin</h3>
+</div>
 <table border="1" cellpadding="8" cellspacing="0">
     <tr>
         <th>No</th>
@@ -36,7 +39,9 @@ include_once("../includes/config.php");
 </table>
 
 <!-- Tabel Member -->
-<h3>Daftar Member</h3>
+<div style="text-align: center; margin: 20px;">
+    <h3>Daftar Member</h3>
+</div>
 <table border="1" cellpadding="8" cellspacing="0">
     <tr>
         <th>No</th>

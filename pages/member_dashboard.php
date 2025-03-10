@@ -78,8 +78,9 @@ if(isset($_GET['action']) && $_GET['action'] === 'return' && isset($_GET['id_tra
     </ul>
 </div>
 
-<div style="margin: 20px;">
+<div style="margin: 20px; text-align: center;">
     <h2>Member Dashboard</h2>
+        <br>
     <p>Selamat datang, <?php echo $nama_member; ?>!</p>
     <?php if(!empty($msg)){ echo "<p class='msg'>$msg</p>"; } ?>
 

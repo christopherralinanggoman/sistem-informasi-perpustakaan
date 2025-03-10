@@ -68,12 +68,19 @@ for($i=5; $i>=0; $i--){
             margin: 0; 
             font-family: Arial, sans-serif;
         }
+
+        /* Centering summary-container */
         .summary-container {
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
-            margin: 20px 0;
+            justify-content: center; /* Centers the boxes horizontally */
+            align-items: center; /* Aligns them vertically */
+            margin: 50px auto; /* Centers the container */
+            max-width: 800px; /* Prevents it from being too wide */
         }
+
+        /* Summary Box Styling */
         .summary-box {
             background: #1e1e2f;
             color: #fff;
@@ -82,12 +89,15 @@ for($i=5; $i>=0; $i--){
             width: 200px;
             text-align: center;
         }
+
+        /* Chart Container */
         .chart-container {
             width: 80%;
             max-width: 800px;
             margin: 20px auto;
         }
     </style>
+
 </head>
 <body>
 
@@ -96,10 +106,10 @@ for($i=5; $i>=0; $i--){
      - session checks
 -->
 
-<div style="margin: 20px;">
+<div style="margin: 20px; text-align: center;">
     <h2>Dashboard Admin</h2>
     <p>Selamat datang di Sistem Informasi Perpustakaan, Admin!</p>
-    
+
     <!-- Contoh: Ringkasan Statistik -->
     <div class="summary-container">
         <div class="summary-box">

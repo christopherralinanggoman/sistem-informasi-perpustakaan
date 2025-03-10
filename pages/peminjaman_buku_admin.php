@@ -8,9 +8,9 @@ if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin'){
 include_once("../includes/header.php");
 include_once("../includes/config.php");
 ?>
-
-<h2>Peminjaman Buku (Admin View)</h2>
-<p>Menampilkan data peminjaman: siapa yang meminjam, sudah kembali, jatuh tempo, dsb.</p>
+<div style="margin: 20px; text-align: center;">
+    <h2>Peminjaman Buku</h2>
+</div>
 
 <table border="1" cellpadding="8" cellspacing="0">
     <tr>

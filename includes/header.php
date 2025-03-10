@@ -58,6 +58,8 @@ if (session_status() === PHP_SESSION_NONE) {
         <li><a href="../pages/pengguna.php">Pengguna</a></li>
         <li><a href="../pages/peminjaman_buku_admin.php">Peminjaman Buku</a></li>
         <li><a href="../pages/tambah_buku_admin.php">Tambah Buku</a></li> <!-- Tambahan Menu -->
+        <li><a href="../pages/daftar_denda.php">Daftar Denda</a></li>
+        <li><a href="../pages/laporan_hari_ini.php">Laporan Hari Ini</a></li>
         <li class="logout"><a href="../logout.php">Logout</a></li>
     </ul>
 </div>

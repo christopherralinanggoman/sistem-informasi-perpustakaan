@@ -9,13 +9,15 @@ include_once("../includes/header.php");
 include_once("../includes/config.php");
 ?>
 
-<h2>Daftar Buku</h2>
-<p>Halaman ini menampilkan daftar buku yang tersedia.</p>
+
+<div style="text-align: center; margin: 20px;">
+    <h2>Daftar Buku</h2>
+</div>
+
 
 <table border="1" cellpadding="8" cellspacing="0">
     <tr>
         <th>No</th>
-        <th>ID Buku</th>
         <th>Judul</th>
         <th>Pengarang</th>
         <th>Penerbit</th>
@@ -33,7 +35,6 @@ include_once("../includes/config.php");
     while($row = mysqli_fetch_assoc($result)){
         echo "<tr>";
         echo "<td>".$no."</td>";                 // Our custom counter
-        echo "<td>".$row['id_buku']."</td>";
         echo "<td>".$row['judul']."</td>";
         echo "<td>".$row['pengarang']."</td>";
         echo "<td>".$row['penerbit']."</td>";

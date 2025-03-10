@@ -85,10 +85,8 @@ $id_anggota  = $member['id_anggota'];
     </ul>
 </div>
 
-<div style="margin: 20px;">
+<div style="margin: 20px; text-align: center;">
     <h2>Riwayat Peminjaman</h2>
-    <p>Selamat datang, <?php echo $nama_member; ?>!</p>
-
     <table>
         <tr>
             <th>No</th>

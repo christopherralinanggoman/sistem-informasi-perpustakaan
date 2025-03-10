@@ -111,27 +111,29 @@ if(count($conditions) > 0){
     </ul>
 </div>
 
-<div style="margin: 20px;">
+<div style="margin: 20px; text-align: center;">
     <h2>Peminjaman Buku</h2>
-    <p>Selamat datang, <?php echo $nama_member; ?>!</p>
     <?php if(!empty($msg)){ echo "<p style='color: green;'>$msg</p>"; } ?>
-
+    </div>
     <!-- Filter Form by Genre and Search -->
     <form class="filter-form" method="GET" action="peminjaman_buku.php">
-        <label for="genre">Filter berdasarkan Genre:</label>
-        <select name="genre" id="genre">
-            <option value="">Semua Genre</option>
-            <option value="Sejarah" <?php if($filterGenre=="Sejarah") echo "selected"; ?>>Sejarah</option>
-            <option value="Teknologi" <?php if($filterGenre=="Teknologi") echo "selected"; ?>>Teknologi</option>
-            <option value="Kuliner" <?php if($filterGenre=="Kuliner") echo "selected"; ?>>Kuliner</option>
-            <option value="Fiksi" <?php if($filterGenre=="Fiksi") echo "selected"; ?>>Fiksi</option>
-            <option value="Psikologi" <?php if($filterGenre=="Psikologi") echo "selected"; ?>>Psikologi</option>
-            <option value="Ekonomi" <?php if($filterGenre=="Ekonomi") echo "selected"; ?>>Ekonomi</option>
-            <!-- Tambahkan genre lain sesuai kebutuhan -->
-        </select>
-        <label for="search">Cari Judul Buku:</label>
-        <input type="text" name="search" id="search" value="<?php echo htmlspecialchars($searchTerm); ?>">
-        <input type="submit" value="Filter">
+    <label for="genre">Filter berdasarkan Genre:</label>
+    <select name="genre" id="genre">
+        <option value="">Semua Genre</option>
+        <option value="Sejarah" <?php if($filterGenre=="Sejarah") echo "selected"; ?>>Sejarah</option>
+        <option value="Teknologi" <?php if($filterGenre=="Teknologi") echo "selected"; ?>>Teknologi</option>
+        <option value="Kuliner" <?php if($filterGenre=="Kuliner") echo "selected"; ?>>Kuliner</option>
+        <option value="Fiksi" <?php if($filterGenre=="Fiksi") echo "selected"; ?>>Fiksi</option>
+        <option value="Psikologi" <?php if($filterGenre=="Psikologi") echo "selected"; ?>>Psikologi</option>
+        <option value="Ekonomi" <?php if($filterGenre=="Ekonomi") echo "selected"; ?>>Ekonomi</option>
+        <!-- Tambahkan genre lain sesuai kebutuhan -->
+    </select>
+
+    <br><br> <!-- Line break added here -->
+
+    <label for="search">Cari Judul Buku:</label>
+    <input type="text" name="search" id="search" value="<?php echo htmlspecialchars($searchTerm); ?>">
+    <input type="submit" value="Cari">
     </form>
 
     <!-- Daftar Buku untuk Dipinjam -->
