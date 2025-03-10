@@ -1,5 +1,5 @@
 <?php
-// pages/peminjaman_buku.php (renamed or referenced as needed)
+// pages/peminjaman_buku_admin.php
 session_start();
 if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin'){
     header("Location: ../login.php");
@@ -16,6 +16,7 @@ include_once("../includes/config.php");
     <tr>
         <th>No</th>
         <th>Nama Anggota</th>
+        <th>Gambar Buku</th>
         <th>Judul Buku</th>
         <th>Tanggal Pinjam</th>
         <th>Due Date</th>
@@ -24,7 +25,7 @@ include_once("../includes/config.php");
     </tr>
     <?php
     $queryPinjam = "
-        SELECT t.id_transaksi, a.nama AS nama_anggota, b.judul, 
+        SELECT t.id_transaksi, a.nama AS nama_anggota, b.judul, b.gambar,
                t.tanggal_pinjam, t.due_date, t.tanggal_kembali, t.status
         FROM transaksi t
         JOIN anggota a ON t.id_anggota = a.id_anggota
@@ -35,19 +36,18 @@ include_once("../includes/config.php");
 
     // Counter for the "No" column
     $no = 1;
-
     while($rowP = mysqli_fetch_assoc($resultPinjam)){
         echo "<tr>";
-        echo "<td>".$no."</td>";  // Use our counter instead of $rowP['id_transaksi']
+        echo "<td>".$no."</td>";  // Custom counter
         echo "<td>".$rowP['nama_anggota']."</td>";
+        echo "<td><img src='../assets/images/books/".$rowP['gambar']."' alt='Gambar Buku' width='80'></td>";
         echo "<td>".$rowP['judul']."</td>";
         echo "<td>".$rowP['tanggal_pinjam']."</td>";
         echo "<td>".$rowP['due_date']."</td>";
         echo "<td>".($rowP['tanggal_kembali'] ? $rowP['tanggal_kembali'] : "-")."</td>";
         echo "<td>".$rowP['status']."</td>";
         echo "</tr>";
-
-        $no++; // increment counter
+        $no++;
     }
     ?>
 </table>

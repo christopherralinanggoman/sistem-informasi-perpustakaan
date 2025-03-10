@@ -53,7 +53,6 @@ $id_anggota  = $member['id_anggota'];
             display: table;
             clear: both;
         }
-
         table {
             width: 100%;
             border-collapse: collapse;
@@ -62,6 +61,7 @@ $id_anggota  = $member['id_anggota'];
         table th, table td {
             border: 1px solid #999;
             padding: 8px;
+            text-align: center;
         }
         table th {
             background: #0052d4;
@@ -80,6 +80,7 @@ $id_anggota  = $member['id_anggota'];
         <li><a href="member_dashboard.php">Beranda</a></li>
         <li><a href="peminjaman_buku.php">Peminjaman Buku</a></li>
         <li><a href="riwayat_peminjaman.php">Riwayat Peminjaman</a></li>
+        <li><a href="bayar_denda.php">Bayar Denda</a></li>
         <li class="logout"><a href="../logout.php">Logout</a></li>
     </ul>
 </div>
@@ -91,6 +92,7 @@ $id_anggota  = $member['id_anggota'];
     <table>
         <tr>
             <th>No</th>
+            <th>Gambar</th>
             <th>Judul Buku</th>
             <th>Tanggal Pinjam</th>
             <th>Jatuh Tempo</th>
@@ -99,32 +101,30 @@ $id_anggota  = $member['id_anggota'];
         </tr>
         <?php
         // Menampilkan semua transaksi milik user (dipinjam atau dikembalikan)
-        $historyQuery = "SELECT t.id_transaksi, t.tanggal_pinjam, t.due_date, t.tanggal_kembali, t.status, b.judul
+        $historyQuery = "SELECT t.id_transaksi, t.tanggal_pinjam, t.due_date, t.tanggal_kembali, t.status, b.judul, b.gambar
                          FROM transaksi t
                          JOIN buku b ON t.id_buku = b.id_buku
                          WHERE t.id_anggota = '$id_anggota'
                          ORDER BY t.id_transaksi DESC";
         $historyResult = mysqli_query($conn, $historyQuery);
 
-        // Tambahkan counter untuk kolom "No"
+        // Counter for sequential numbering
         $no = 1;
-
         if(mysqli_num_rows($historyResult) > 0){
             while($row = mysqli_fetch_assoc($historyResult)){
                 echo "<tr>";
-                // Tampilkan counter, bukan $row['id_transaksi']
                 echo "<td>".$no."</td>";
+                echo "<td><img src='../assets/images/books/".$row['gambar']."' alt='Gambar Buku' width='80'></td>";
                 echo "<td>".$row['judul']."</td>";
                 echo "<td>".$row['tanggal_pinjam']."</td>";
                 echo "<td>".$row['due_date']."</td>";
                 echo "<td>".($row['tanggal_kembali'] ? $row['tanggal_kembali'] : "-")."</td>";
                 echo "<td>".$row['status']."</td>";
                 echo "</tr>";
-
-                $no++; // increment the counter
+                $no++;
             }
         } else {
-            echo "<tr><td colspan='6'>Belum ada riwayat peminjaman.</td></tr>";
+            echo "<tr><td colspan='7'>Belum ada riwayat peminjaman.</td></tr>";
         }
         ?>
     </table>

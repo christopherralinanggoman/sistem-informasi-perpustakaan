@@ -19,29 +19,26 @@ $msg = "";
 // Proses peminjaman buku
 if(isset($_GET['action']) && $_GET['action'] === 'borrow' && isset($_GET['id_buku'])){
     $id_buku = $_GET['id_buku'];
-
+    
     // Ambil stok buku dari tabel buku
     $stokQuery = "SELECT stok FROM buku WHERE id_buku = '$id_buku'";
     $stokResult = mysqli_query($conn, $stokQuery);
     $stokRow = mysqli_fetch_assoc($stokResult);
     $stok = $stokRow['stok'];
-
-    // Jika stok <= 0, tidak bisa dipinjam
+    
     if($stok <= 0){
         $msg = "Buku ini sudah habis (stok 0).";
     } else {
-        // Masih bisa dipinjam
+        // Batas peminjaman 3 hari
         $tanggal_pinjam = date('Y-m-d');
-        $due_date = date('Y-m-d', strtotime('+7 days'));
-
-        // 1) Insert ke tabel transaksi
+        $due_date = date('Y-m-d', strtotime('+3 days'));
+        
         $insertQuery = "INSERT INTO transaksi (id_buku, id_anggota, tanggal_pinjam, due_date, status)
                         VALUES ('$id_buku', '$id_anggota', '$tanggal_pinjam', '$due_date', 'dipinjam')";
         if(mysqli_query($conn, $insertQuery)){
-            // 2) Update stok buku, kurangi 1
+            // Update stok: kurangi 1
             $updateStok = "UPDATE buku SET stok = stok - 1 WHERE id_buku = '$id_buku'";
             mysqli_query($conn, $updateStok);
-
             $msg = "Buku berhasil dipinjam!";
         } else {
             $msg = "Terjadi kesalahan: " . mysqli_error($conn);
@@ -49,10 +46,29 @@ if(isset($_GET['action']) && $_GET['action'] === 'borrow' && isset($_GET['id_buk
     }
 }
 
-// --- Genre Filter ---
+// --- Genre Filter & Search ---
 $filterGenre = "";
 if(isset($_GET['genre']) && $_GET['genre'] != ""){
     $filterGenre = mysqli_real_escape_string($conn, $_GET['genre']);
+}
+
+$searchTerm = "";
+if(isset($_GET['search']) && $_GET['search'] != ""){
+    $searchTerm = mysqli_real_escape_string($conn, $_GET['search']);
+}
+
+// Build query with optional filters
+$conditions = array();
+if($filterGenre != ""){
+    $conditions[] = "genre = '$filterGenre'";
+}
+if($searchTerm != ""){
+    $conditions[] = "judul LIKE '%$searchTerm%'";
+}
+
+$bookQuery = "SELECT * FROM buku";
+if(count($conditions) > 0){
+    $bookQuery .= " WHERE " . implode(" AND ", $conditions);
 }
 ?>
 <!DOCTYPE html>
@@ -62,86 +78,24 @@ if(isset($_GET['genre']) && $_GET['genre'] != ""){
     <title>Peminjaman Buku</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
-        .navbar {
-            background: #333;
-            overflow: hidden;
-        }
-        .navbar ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-        .navbar li {
-            float: left;
-        }
-        .navbar li a {
-            display: block;
-            color: #fff;
-            padding: 14px 20px;
-            text-decoration: none;
-        }
-        .navbar li a:hover {
-            background: #555;
-        }
-        .navbar li.logout {
-            float: right;
-        }
-        .navbar::after {
-            content: '';
-            display: table;
-            clear: both;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-        table th, table td {
-            border: 1px solid #999;
-            padding: 8px;
-            text-align: center;
-        }
-        table th {
-            background: #0052d4;
-            color: #fff;
-        }
-        h2 {
-            margin-top: 20px;
-        }
-        .borrow-btn {
-            background-color: #007bff;
-            color: #fff;
-            padding: 5px 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .borrow-btn:hover {
-            background-color: #0056b3;
-        }
-        .filter-form {
-            margin-bottom: 15px;
-        }
-        .filter-form select {
-            padding: 5px;
-            font-size: 1em;
-        }
-        .filter-form input[type='submit'] {
-            padding: 5px 10px;
-            font-size: 1em;
-            background: #0052d4;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .filter-form input[type='submit']:hover {
-            background: #003a7e;
-        }
+        body { margin: 0; font-family: Arial, sans-serif; }
+        .navbar { background: #333; overflow: hidden; }
+        .navbar ul { list-style: none; margin: 0; padding: 0; }
+        .navbar li { float: left; }
+        .navbar li a { display: block; color: #fff; padding: 14px 20px; text-decoration: none; }
+        .navbar li a:hover { background: #555; }
+        .navbar li.logout { float: right; }
+        .navbar::after { content: ''; display: table; clear: both; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        table th, table td { border: 1px solid #999; padding: 8px; text-align: center; }
+        table th { background: #0052d4; color: #fff; }
+        h2 { margin-top: 20px; }
+        .borrow-btn { background-color: #007bff; color: #fff; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; }
+        .borrow-btn:hover { background-color: #0056b3; }
+        .filter-form { margin-bottom: 15px; }
+        .filter-form select, .filter-form input[type="text"] { padding: 5px; font-size: 1em; }
+        .filter-form input[type="submit"] { padding: 5px 10px; font-size: 1em; background: #0052d4; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+        .filter-form input[type="submit"]:hover { background: #003a7e; }
     </style>
 </head>
 <body>
@@ -152,6 +106,7 @@ if(isset($_GET['genre']) && $_GET['genre'] != ""){
         <li><a href="member_dashboard.php">Beranda</a></li>
         <li><a href="peminjaman_buku.php">Peminjaman Buku</a></li>
         <li><a href="riwayat_peminjaman.php">Riwayat Peminjaman</a></li>
+        <li><a href="bayar_denda.php">Bayar Denda</a></li>
         <li class="logout"><a href="../logout.php">Logout</a></li>
     </ul>
 </div>
@@ -159,9 +114,9 @@ if(isset($_GET['genre']) && $_GET['genre'] != ""){
 <div style="margin: 20px;">
     <h2>Peminjaman Buku</h2>
     <p>Selamat datang, <?php echo $nama_member; ?>!</p>
-    <?php if(!empty($msg)) { echo "<p style='color: green;'>$msg</p>"; } ?>
+    <?php if(!empty($msg)){ echo "<p style='color: green;'>$msg</p>"; } ?>
 
-    <!-- Filter Form by Genre -->
+    <!-- Filter Form by Genre and Search -->
     <form class="filter-form" method="GET" action="peminjaman_buku.php">
         <label for="genre">Filter berdasarkan Genre:</label>
         <select name="genre" id="genre">
@@ -174,6 +129,8 @@ if(isset($_GET['genre']) && $_GET['genre'] != ""){
             <option value="Ekonomi" <?php if($filterGenre=="Ekonomi") echo "selected"; ?>>Ekonomi</option>
             <!-- Tambahkan genre lain sesuai kebutuhan -->
         </select>
+        <label for="search">Cari Judul Buku:</label>
+        <input type="text" name="search" id="search" value="<?php echo htmlspecialchars($searchTerm); ?>">
         <input type="submit" value="Filter">
     </form>
 
@@ -182,7 +139,7 @@ if(isset($_GET['genre']) && $_GET['genre'] != ""){
         <tr>
             <th>No</th>
             <th>Gambar</th>
-            <th>Judul</th>
+            <th>Judul Buku</th>
             <th>Genre</th>
             <th>Pengarang</th>
             <th>Penerbit</th>
@@ -191,15 +148,7 @@ if(isset($_GET['genre']) && $_GET['genre'] != ""){
             <th>Aksi</th>
         </tr>
         <?php
-        // Build query (include filter by genre if chosen)
-        $bookQuery = "SELECT * FROM buku";
-        if($filterGenre != ""){
-            $bookQuery .= " WHERE genre = '$filterGenre'";
-        }
-
         $bookResult = mysqli_query($conn, $bookQuery);
-
-        // Initialize counter
         $no = 1;
         if(mysqli_num_rows($bookResult) > 0){
             while($row = mysqli_fetch_assoc($bookResult)){
@@ -211,7 +160,7 @@ if(isset($_GET['genre']) && $_GET['genre'] != ""){
                 $pengarang = $row['pengarang'];
                 $penerbit  = $row['penerbit'];
                 $isbn      = $row['isbn'];
-
+                
                 echo "<tr>";
                 echo "<td>".$no."</td>";
                 echo "<td><img src='../assets/images/books/".$gambar."' alt='Gambar Buku' width='80'></td>";
@@ -221,17 +170,13 @@ if(isset($_GET['genre']) && $_GET['genre'] != ""){
                 echo "<td>".$penerbit."</td>";
                 echo "<td>".$isbn."</td>";
                 echo "<td>".$stokBuku."</td>";
-
                 echo "<td>";
                 if($stokBuku > 0){
-                    // Tampilkan tombol pinjam
-                    echo "<button class='borrow-btn' 
-                          onclick=\"location.href='peminjaman_buku.php?action=borrow&id_buku=".$id_buku."'\">Pinjam Buku</button>";
+                    echo "<button class='borrow-btn' onclick=\"location.href='peminjaman_buku.php?action=borrow&id_buku=".$id_buku."'\">Pinjam Buku</button>";
                 } else {
                     echo "Tidak Tersedia";
                 }
                 echo "</td>";
-
                 echo "</tr>";
                 $no++;
             }

@@ -53,6 +53,7 @@ if (session_status() === PHP_SESSION_NONE) {
 <div class="navbar">
     <ul>
         <!-- Admin Menu Bar -->
+        <li><a href="../pages/admin_dashboard.php">Statistik</a></li> <!-- Tambahan Menu -->
         <li><a href="../pages/daftarbuku.php">Daftar Buku</a></li>
         <li><a href="../pages/pengguna.php">Pengguna</a></li>
         <li><a href="../pages/peminjaman_buku_admin.php">Peminjaman Buku</a></li>
